@@ -5,6 +5,7 @@ import com.csy.springbootauthbe.user.Role;
 import com.csy.springbootauthbe.user.User;
 import com.csy.springbootauthbe.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +20,11 @@ public class AuthenticationService {
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
     public AuthenticationResponse register(RegisterRequest request) {
+
+        // Check if the email already exists in the database
+        if (repository.existsByEmail(request.getEmail())) {
+            throw new DataIntegrityViolationException("Email already exists");
+        }
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
@@ -39,7 +45,7 @@ public class AuthenticationService {
 
         // Return the response with the message and user details
         return AuthenticationResponse.builder()
-                .message("User Login successfully.")
+                .message("User Registered successfully.")
                 .user(userObj)
                 .build();
     }

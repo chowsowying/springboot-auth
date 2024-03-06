@@ -1,21 +1,49 @@
 import { useForm } from "react-hook-form";
 import { CloudIcon } from "@heroicons/react/24/solid";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { LoginUser } from "@/api/authAPI";
+import { setLoading } from "@/redux/loaderSlice";
+import { setUser } from "@/redux/userSlice";
+import { toast } from "react-toastify";
 
-type Props = {};
-
-const Login = (props: Props) => {
+const Login = () => {
   const {
     register,
     trigger,
+    getValues,
     formState: { errors },
   } = useForm();
 
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   //Func: Handle form submission
-  const onSubmit = async (e: any) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { email, password } = getValues();
     const isValid = await trigger();
-    if (!isValid) {
-      e.preventDefault();
+
+    if (!isValid) return;
+
+    try {
+      dispatch(setLoading(true));
+
+      const response = await LoginUser(email, password);
+      dispatch(setLoading(false));
+      const { user } = response.data;
+      // Store user data and token in local storage
+      localStorage.setItem("user", JSON.stringify(user));
+      toast.success(response.data.message);
+      // Update redux
+      dispatch(setUser(user));
+      // Redirect if user is admin or user
+      if (user.role === "ADMIN") navigate("/admin/dashboard");
+      else navigate("/user/dashboard");
+    } catch (error: any) {
+      dispatch(setLoading(false));
+      console.log(error);
+      toast.error(error.message);
     }
   };
 
@@ -26,7 +54,9 @@ const Login = (props: Props) => {
         <div className="bg-white h-full w-[400px] rounded-md p-5">
           {/* Header */}
           <div className="mb-5">
-            <CloudIcon className="h-6 w-6 text-gray-400" />
+            <Link to={"/"}>
+              <CloudIcon className="h-6 w-6 text-gray-400" />
+            </Link>
             <h1 className="font-bold text-xl">Login</h1>
             <p className="text-sm text-gray-500">You will be redirected to the homepage</p>
           </div>

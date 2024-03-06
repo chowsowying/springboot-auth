@@ -1,6 +1,10 @@
 import { useForm } from "react-hook-form";
 import { CloudIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
+import { useAppDispatch } from "@/redux/store";
+import { RegisterUser } from "@/api/authAPI";
+import { setLoading } from "@/redux/loaderSlice";
+import { toast } from "react-toastify";
 
 type Props = {};
 
@@ -8,14 +12,33 @@ const Register = (props: Props) => {
   const {
     register,
     trigger,
+    getValues,
     formState: { errors },
   } = useForm();
 
+  const dispatch = useAppDispatch();
+
   //Func: Handle form submission
-  const onSubmit = async (e: any) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { firstname, lastname, email, password } = getValues();
     const isValid = await trigger();
-    if (!isValid) {
-      e.preventDefault();
+
+    if (!isValid) return;
+
+    try {
+      dispatch(setLoading(true));
+      const response = await RegisterUser(firstname, lastname, email, password);
+      dispatch(setLoading(false));
+
+      if (response.status === 200) {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error: any) {
+      dispatch(setLoading(false));
+      toast.error(error.message);
     }
   };
 
@@ -26,7 +49,9 @@ const Register = (props: Props) => {
         <div className="bg-white h-full w-[400px] rounded-md p-5">
           {/* Header */}
           <div className="mb-5">
-            <CloudIcon className="h-6 w-6 text-gray-400" />
+            <Link to={"/"}>
+              <CloudIcon className="h-6 w-6 text-gray-400" />
+            </Link>
             <h1 className="font-bold text-xl">Register</h1>
             <p className="text-sm text-gray-500">You will be redirected to the login page</p>
           </div>
@@ -36,16 +61,31 @@ const Register = (props: Props) => {
             <input
               className="bg-gray-200 px-2 py-1 rounded-md w-full"
               type="text"
-              placeholder="Full Name"
-              {...register("name", {
+              placeholder="First Name"
+              {...register("firstname", {
                 required: true,
                 maxLength: 100,
               })}
             />
-            {errors.name && (
+            {errors.firstname && (
               <p className="mt-1 text-red-500 text-sm">
-                {errors.name.type === "required" && "This field is required."}
-                {errors.name.type === "maxLength" && "Max length is 100 char."}
+                {errors.firstname.type === "required" && "This field is required."}
+                {errors.firstname.type === "maxLength" && "Max length is 100 char."}
+              </p>
+            )}
+            <input
+              className="mt-3 bg-gray-200 px-2 py-1 rounded-md w-full"
+              type="text"
+              placeholder="Last Name"
+              {...register("lastname", {
+                required: true,
+                maxLength: 100,
+              })}
+            />
+            {errors.lastname && (
+              <p className="mt-1 text-red-500 text-sm">
+                {errors.lastname.type === "required" && "This field is required."}
+                {errors.lastname.type === "maxLength" && "Max length is 100 char."}
               </p>
             )}
             <input
