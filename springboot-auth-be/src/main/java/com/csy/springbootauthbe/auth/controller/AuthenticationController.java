@@ -1,5 +1,9 @@
-package com.csy.springbootauthbe.auth;
+package com.csy.springbootauthbe.auth.controller;
 
+import com.csy.springbootauthbe.auth.service.AuthenticationService;
+import com.csy.springbootauthbe.auth.utils.AuthenticationResponse;
+import com.csy.springbootauthbe.auth.utils.LoginRequest;
+import com.csy.springbootauthbe.auth.utils.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

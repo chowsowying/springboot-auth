@@ -1,4 +1,4 @@
-package com.csy.springbootauthbe.user;
+package com.csy.springbootauthbe.auth.entity;
 
 //Imports
 import jakarta.persistence.*;

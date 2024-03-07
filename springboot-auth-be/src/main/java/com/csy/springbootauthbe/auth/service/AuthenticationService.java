@@ -1,9 +1,13 @@
-package com.csy.springbootauthbe.auth;
+package com.csy.springbootauthbe.auth.service;
 
+import com.csy.springbootauthbe.auth.utils.AuthenticationResponse;
+import com.csy.springbootauthbe.auth.utils.LoginRequest;
+import com.csy.springbootauthbe.auth.utils.RegisterRequest;
+import com.csy.springbootauthbe.auth.utils.UserResponse;
 import com.csy.springbootauthbe.config.JWTService;
-import com.csy.springbootauthbe.user.Role;
-import com.csy.springbootauthbe.user.User;
-import com.csy.springbootauthbe.user.UserRepository;
+import com.csy.springbootauthbe.auth.entity.Role;
+import com.csy.springbootauthbe.auth.entity.User;
+import com.csy.springbootauthbe.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;

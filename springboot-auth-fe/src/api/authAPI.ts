@@ -16,3 +16,15 @@ export const RegisterUser = async (
   const data = { firstname, lastname, email, password };
   return await axios.post(url, data);
 };
+
+export const CurrentUser = async (authtoken: string) => {
+  const url = `${import.meta.env.VITE_APP_API}/user/currentUser`;
+  const headers = { Authorization: `Bearer ${authtoken}` };
+  return await axios.get(url, { headers });
+};
+
+export const CurrentAdmin = async (authtoken: string) => {
+  const url = `${import.meta.env.VITE_APP_API}/user/currentAdmin`;
+  const headers = { Authorization: `Bearer ${authtoken}` };
+  return await axios.get(url, { headers });
+};

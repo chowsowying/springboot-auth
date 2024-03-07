@@ -1,4 +1,4 @@
-package com.csy.springbootauthbe.auth;
+package com.csy.springbootauthbe.auth.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

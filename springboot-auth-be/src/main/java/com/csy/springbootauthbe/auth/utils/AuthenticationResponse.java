@@ -1,6 +1,6 @@
-package com.csy.springbootauthbe.auth;
+package com.csy.springbootauthbe.auth.utils;
 
-import com.csy.springbootauthbe.user.Role;
+import com.csy.springbootauthbe.auth.utils.UserResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

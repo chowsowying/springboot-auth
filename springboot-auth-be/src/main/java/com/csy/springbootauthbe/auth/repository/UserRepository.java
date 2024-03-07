@@ -1,6 +1,7 @@
-package com.csy.springbootauthbe.user;
+package com.csy.springbootauthbe.auth.repository;
 
 //Imports
+import com.csy.springbootauthbe.auth.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
